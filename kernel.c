@@ -2,6 +2,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "gdt.h"
+
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -108,6 +110,7 @@ void kernel_main(void)
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
+	initGdt(); //init gdt
 
 	/* Newline support is left as an exercise. */
 	terminal_writestring("Hello World!");
