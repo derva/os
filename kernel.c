@@ -113,5 +113,5 @@ void kernel_main(void)
 	initGdt(); //init gdt
 
 	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello World!");
+	terminal_writestring("Hello World 123!");
 }
