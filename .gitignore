@@ -1,2 +1,4 @@
 isodir/
 bin/
+boot1.o
+boot.o

@@ -8,27 +8,28 @@ CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
 LINKERFLAGS=-ffreestanding -nostdlib -lgcc
 
 all: $(BINARY)
-	@echo "done :)"
+	echo "done :)"
 
-$(BINARY): kernel.o gdt.o gdtas.o linker.ld
-	@mv $(BINARY) ./bin
+$(BINARY): kernel.o gdt.o gdts.o linker.ld
+	mv $(BINARY) ./bin
 	
 kernel.o: kernel.c
-	@echo "** Building kernel"
-	@$(CCPATH)/$(CC) -c kernel.c -o kernel.o -g $(CFLAGS) $(OPT)
+	echo "** Building kernel"
+	@$(CCPATH)/$(CC) -g -c kernel.c -o kernel.o -g $(CFLAGS) $(OPT)
+	echo "after building kernel"
 
 gdt.o: gdt.c
-	@echo "** Building gdt.c"
-	@$(CCPATH)/$(CC) -c gdt.c -o gdt.o -g $(CFLAGS) $(OPT)
+	echo "** Building gdt.c"
+	@$(CCPATH)/$(CC) -g -c gdt.c -o gdt.o -g $(CFLAGS) $(OPT)
 
 
-gdtas.o: gdt.asm
-	@echo "** Building assembler code"
+gdts.o: gdt.asm
+	echo "** Building assembler code"
 	@$(CCPATH)/$(ASM) gdt.asm -o gdts.o
 
-linker.ld: boot.o kernel.o gdtas.o gdt.o
-	@echo "** Linking"
-	$(CCPATH)/$(CC) -T linker.ld -o $(BINARY) $(LINKERFLAGS) $(OPT) boot.o gdt.o gdts.o kernel.o
+linker.ld: boot1.o kernel.o gdts.o gdt.o
+	echo "** Linking"
+	$(CCPATH)/$(CC) -T linker.ld -o $(BINARY) $(LINKERFLAGS) $(OPT) boot1.o gdt.o gdts.o kernel.o
 
 iso:
 	grub-mkrescue isodir/ -o os.bin isodir/	

@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "multiboot.h"
 
 #include "gdt.h"
 
@@ -106,12 +107,25 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
-void kernel_main(void) 
-{
-	/* Initialize terminal interface */
+
+
+//void kernel_main(struct multiboot_info* mbt, unsigned int magic) {
+void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
+
 	terminal_initialize();
+	terminal_writestring("prije for loopa 1\n");
+
+	for (int i = 0; i < mbt->mmap_length; i += sizeof(struct multiboot_mmap_entry)) {
+		struct multiboot_mmap_entry *mmt  = (struct multiboot_mmap_entry*)(mbt->mmap_addr+i);
+		terminal_writestring("inside\n");
+	}
+	terminal_writestring("poslije for loopa");
+
+
+	//terminal_initialize();
+	/* Initialize terminal interface */
 	initGdt(); //init gdt
 
 	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello World!");
+	terminal_writestring("Hello World123!");
 }
