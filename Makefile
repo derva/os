@@ -1,37 +1,54 @@
-BINARY=nos.bin
+BINARY=os.bin
+CODEDIRS=. lib
+INCDIRS=. ./include/ # can be list
 
 CCPATH=~/opt/cross/bin
 CC=i686-elf-gcc
 ASM=i686-elf-as
 OPT=-O2
-CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
-LINKERFLAGS=-ffreestanding -nostdlib -lgcc
+
+# generate files that encode make rules for the .h dependencies
+DEPFLAGS=-MP -MD
+# automatically add the -I onto each include directory
+CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS)
+
+# for-style iteration (foreach) and regular expression completions (wildcard)
+CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.c))
+ASFILES=$(foreach A,$(ASDIRS),$(wildcard $(D)/*.asm))
+# regular expression replacement
+OBJECTS=$(patsubst %.c,%.o,$(CFILES))
+ASMBS=$(patsubst %.asm,%.o,$(ASFILES))
+DEPFILES=$(patsubst %.c,%.d,$(CFILES))
 
 all: $(BINARY)
-	echo "done :)"
 
-$(BINARY): kernel.o gdt.o gdts.o linker.ld
-	mv $(BINARY) ./bin
-	
-kernel.o: kernel.c
-	echo "** Building kernel"
-	@$(CCPATH)/$(CC) -g -c kernel.c -o kernel.o -g $(CFLAGS) $(OPT)
-	echo "after building kernel"
+$(BINARY): $(OBJECTS) $(ASMBS)
+	@echo "Linking ... "
+	$(CCPATH)/$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc boot.o gdts.o $^
+	@echo "Done":
 
-gdt.o: gdt.c
-	echo "** Building gdt.c"
-	@$(CCPATH)/$(CC) -g -c gdt.c -o gdt.o -g $(CFLAGS) $(OPT)
+# only want the .c file dependency here, thus $< instead of $^.
+#
+%.o:%.c
+	@echo $@ $^
+	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
 
-
-gdts.o: gdt.asm
-	echo "** Building assembler code"
-	@$(CCPATH)/$(ASM) gdt.asm -o gdts.o
-
-linker.ld: boot1.o kernel.o gdts.o gdt.o
-	echo "** Linking"
-	$(CCPATH)/$(CC) -T linker.ld -o $(BINARY) $(LINKERFLAGS) $(OPT) boot1.o gdt.o gdts.o kernel.o
-
-iso:
-	grub-mkrescue isodir/ -o os.bin isodir/	
 clean:
-	rm -rf ./bin/$(BINARY) kernel.o
+	rm -rf $(BINARY) $(OBJECTS) $(ASMBS) $(DEPFILES)
+
+# shell commands are a set of keystrokes away
+distribute: clean
+	tar zcvf dist.tgz *
+
+# @ silences the printing of the command
+# $(info ...) prints output
+diff:
+	$(info The status of the repository, and the volume of per-file changes:)
+	@git status
+	@git diff --stat
+
+# include the dependencies
+-include $(DEPFILES)
+
+# add .PHONY so that the non-targetfile - rules work even if a file with the same name exists.
+.PHONY: all clean distribute diff

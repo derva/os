@@ -1,9 +1,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "multiboot.h"
+#include "../include/multiboot.h"
 
-#include "gdt.h"
+#include "../include/gdt.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
