@@ -86,8 +86,13 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(char c) 
-{
+void terminal_putchar(char c) {
+	//this will not work with "\n" :)
+	if (c == '\n') {
+		terminal_row++;
+		terminal_column = 0;
+		return;
+	}
 	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
 	if (++terminal_column == VGA_WIDTH) {
 		terminal_column = 0;
@@ -107,25 +112,32 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
+void print_hex(uint32_t value) {
+	char hex[8];
+	int i = 8;
+	for (; i >= 0; i--) {
+		int digit = (value >> (i * 4)) & 0xf;
+		hex[7 - i] = (digit > 10 ) ? ('A' + digit - 10) : ('0' + digit);
+	}
+	hex[8] = '\0';
+	terminal_writestring(hex);
+}
 
 
 //void kernel_main(struct multiboot_info* mbt, unsigned int magic) {
 void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 
 	terminal_initialize();
-	terminal_writestring("prije for loopa 1\n");
 
+	terminal_writestring("Memory info\n");
 	for (int i = 0; i < mbt->mmap_length; i += sizeof(struct multiboot_mmap_entry)) {
 		struct multiboot_mmap_entry *mmt  = (struct multiboot_mmap_entry*)(mbt->mmap_addr+i);
-		terminal_writestring("inside\n");
+		print_hex(mmt->addr_low);
+		terminal_writestring("\n");
 	}
-	terminal_writestring("poslije for loopa");
 
 
 	//terminal_initialize();
 	/* Initialize terminal interface */
 	initGdt(); //init gdt
-
-	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello World123!");
 }

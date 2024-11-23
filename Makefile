@@ -50,5 +50,8 @@ diff:
 # include the dependencies
 -include $(DEPFILES)
 
+run:
+	qemu-system-i386 -kernel $(BINARY)
+
 # add .PHONY so that the non-targetfile - rules work even if a file with the same name exists.
 .PHONY: all clean distribute diff
