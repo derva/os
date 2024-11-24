@@ -4,6 +4,7 @@
 #include "../include/multiboot.h"
 
 #include "../include/gdt.h"
+#include "../include/pmm.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -112,6 +113,7 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
+//for now
 void print_hex(uint32_t value) {
 	char hex[8];
 	int i = 8;
@@ -123,6 +125,41 @@ void print_hex(uint32_t value) {
 	terminal_writestring(hex);
 }
 
+void tws(const char* data) {
+	terminal_writestring(data);
+}
+
+//for now
+void print_int(int32_t value) {
+	char buffer[32];
+	int i = 0;
+	bool negative = false;
+
+	if (value < 0) {
+		negative = true;
+		value = -value;
+	}
+
+	do {
+		buffer[i++] = '0' + value % 10;
+		value /= 10;
+	} while (value > 0);
+
+	if (negative) {
+		buffer[i++] = '-';
+	}
+
+	buffer[i] = '\0';
+
+	for (int j = 0; j < i/2; j++) {
+		int index  = i - j - 1;
+		char tmp = buffer[index];
+		buffer[index] = buffer[j];
+		buffer[j] = tmp;
+	}
+
+	tws(buffer);
+}
 
 //void kernel_main(struct multiboot_info* mbt, unsigned int magic) {
 void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
@@ -130,11 +167,28 @@ void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 	terminal_initialize();
 
 	terminal_writestring("Memory info\n");
+	initPMM(mbt);
+
+	terminal_writestring("\n");
+    /*
 	for (int i = 0; i < mbt->mmap_length; i += sizeof(struct multiboot_mmap_entry)) {
 		struct multiboot_mmap_entry *mmt  = (struct multiboot_mmap_entry*)(mbt->mmap_addr+i);
+		terminal_writestring("Address low\n");
 		print_hex(mmt->addr_low);
 		terminal_writestring("\n");
+		terminal_writestring("Address length\n");
+        print_hex(mmt->len_low);
+		terminal_writestring("\n");
+		terminal_writestring("Address type\n");
+		print_hex(mmt->type);
+		terminal_writestring("\n");
+
+         tws("\nPage start\n");
+         print_hex(page_start);
+         tws("\nPage end\n");
+         print_hex(page_end - 1);
 	}
+    */
 
 
 	//terminal_initialize();

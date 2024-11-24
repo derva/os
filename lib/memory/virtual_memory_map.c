@@ -47,7 +47,7 @@ pt_entry* find_first_free_page() {
 		}
 		entry += (PAGE_SIZE * PAGES_PER_TABLE);
 	}
-	return -1; //error
+	//return -1; //error
 }
 
 void* allocate_page() {
@@ -66,3 +66,5 @@ void* deallocate_page(virtual_address address) {
 void initialize_virtual_memory() {
 
 }
+
+init_physical_memory
