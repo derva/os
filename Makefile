@@ -24,7 +24,7 @@ all: $(BINARY)
 
 $(BINARY): $(OBJECTS) $(ASMBS)
 	@echo "Linking ... "
-	$(CCPATH)/$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc boot.o gdts.o $^
+	$(CCPATH)/$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc boot.o gdts.o paging.o $^
 	@echo "Done":
 
 # only want the .c file dependency here, thus $< instead of $^.
