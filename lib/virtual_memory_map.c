@@ -9,6 +9,9 @@ void init_paging() {
 	}
 
 	//we will fill all 1024 entries in the table, mapping 4 megabytes
+	//except for the first 4KiB to capture any possible NULL pointer
+	//dereferencing or other bugs. use `i=0` to map the first 4KiB if
+	//you wish.
 	for(unsigned int i = 1; i < 1024; i++)
 	{
 		// As the address is page aligned, it will always leave 12 bits zeroed.
