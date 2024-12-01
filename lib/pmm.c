@@ -26,7 +26,7 @@ void set_page_free(uint32_t bit, uint8_t* map) {
 
 void initPMM(struct multiboot_info* mbt) {
 	tws("\nInitializing Physical Memory Manager\n");
-	for (int i = 0; i < mbt->mmap_length; i += sizeof(struct multiboot_mmap_entry)) {
+	for (unsigned int i = 0; i < mbt->mmap_length; i += sizeof(struct multiboot_mmap_entry)) {
 		struct multiboot_mmap_entry *mmt  = (struct multiboot_mmap_entry*)(mbt->mmap_addr+i);
 		if (mmt->type == MULTIBOOT_MEMORY_AVAILABLE) {
             uint32_t start_page = mmt->addr_low / PAGE_SIZE ;

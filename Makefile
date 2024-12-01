@@ -1,6 +1,7 @@
 BINARY=os.bin
 CODEDIRS=. lib
 INCDIRS=. ./include/ # can be list
+ASDIRS=.
 
 CCPATH=~/opt/cross/bin
 CC=i686-elf-gcc
@@ -14,22 +15,26 @@ CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D))
 
 # for-style iteration (foreach) and regular expression completions (wildcard)
 CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.c))
-ASFILES=$(foreach A,$(ASDIRS),$(wildcard $(D)/*.asm))
+ASFILES=$(foreach D,$(ASDIRS),$(wildcard $(D)/*.s))
 # regular expression replacement
 OBJECTS=$(patsubst %.c,%.o,$(CFILES))
-ASMBS=$(patsubst %.asm,%.o,$(ASFILES))
+ASMBS=$(patsubst %.s,%.o,$(ASFILES))
 DEPFILES=$(patsubst %.c,%.d,$(CFILES))
 
 all: $(BINARY)
 
 $(BINARY): $(OBJECTS) $(ASMBS)
 	@echo "Linking ... "
-	$(CCPATH)/$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc boot.o gdts.o paging.o $^
+	$(CCPATH)/$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
 	@echo "Done":
 
 # only want the .c file dependency here, thus $< instead of $^.
 #
 %.o:%.c
+	@echo $@ $^
+	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
+
+%.o:%.s
 	@echo $@ $^
 	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
 
