@@ -22,8 +22,9 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-	/* Subtract 8 so that with to 4 byte parameters the stack is
-	 * aligned to 16 bytes when kernel_main is called */
+	/* Subtract 8 so that after the 2 32-bit parameters are pushed
+         * on the stack, the stack will still be 16-byte aligned when
+	 * kernel_main is called */
 	mov $stack_top-8, %esp
 	/* push the pointer to the Multiboot infromation structure*/
 	push %ebx
