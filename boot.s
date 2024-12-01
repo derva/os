@@ -22,13 +22,15 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
- 
-	mov $stack_top, %esp
+	/* Subtract 8 so that with to 4 byte parameters the stack is
+	 * aligned to 16 bytes when kernel_main is called */
+	mov $stack_top-8, %esp
 	/* push the pointer to the Multiboot infromation structure*/
 	push %ebx
 	/* push magic value */
 	push %eax
 
+	cld /* rquired for the System V 32-bit ABI */
 	call kernel_main
 	cli
 1:	hlt

@@ -10,7 +10,8 @@ void initSegment(int num, uint32_t limit, uint32_t base, uint8_t access, uint8_t
 	gdt_entries[num].base_high = (base >> 24) & 0xFF;
 	gdt_entries[num].access = access;
 	gdt_entries[num].granularity = (limit >> 16) & 0x0F;
-	gdt_entries[num].granularity |= gdt_entries[num].granularity;
+//	gdt_entries[num].granularity |= gdt_entries[num].granularity;
+	gdt_entries[num].granularity |= (gran & 0xF0);
 }
 
 void initGdt() {
@@ -18,8 +19,8 @@ void initGdt() {
 	gdt_ptr.base = (unsigned int)gdt_entries;
 
 	initSegment(0, 0, 0, 0, 0);
-	initSegment(1, 0xFFFFFFFF, 0, 0x92, 0xCF); //kernel code segment
-	initSegment(2, 0, 0xFFFFFFFF, 0x92, 0xCF); //kernel data segment
+	initSegment(1, 0xFFFFFFFF, 0, 0x9A, 0xCF); //kernel code segment
+	initSegment(2, 0xFFFFFFFF, 0, 0x92, 0xCF); //kernel data segment
 	//initSegment(3, 0xFFFFFFFF, 0, 0xFA, 0xCF); //user code
 	//initSegment(4, 0xFFFFFFFF, 0, 0xF2, 0xCF); //user code
 	

@@ -116,7 +116,7 @@ void terminal_writestring(const char* data)
 
 //for now
 void print_hex(uint32_t value) {
-	char hex[8];
+	char hex[9];
 	int i = 8;
 	for (; i >= 0; i--) {
 		int digit = (value >> (i * 4)) & 0xf;

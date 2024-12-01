@@ -9,7 +9,7 @@ void init_paging() {
 	}
 
 	//we will fill all 1024 entries in the table, mapping 4 megabytes
-	for(unsigned int i = 0; i < 1024; i++)
+	for(unsigned int i = 1; i < 1024; i++)
 	{
 		// As the address is page aligned, it will always leave 12 bits zeroed.
 		// Those bits are used by the attributes ;)
