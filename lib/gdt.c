@@ -1,4 +1,4 @@
-#include "../include/gdt.h"
+#include "include/gdt.h"
 
 struct gdt_segment gdt_entries[3];
 struct gdt_ptr_struct gdt_ptr;

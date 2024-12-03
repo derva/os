@@ -1,12 +1,12 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "../include/multiboot.h"
+#include "include/multiboot.h"
 
-#include "../include/gdt.h"
-#include "../include/pmm.h"
-#include "../include/virtual_memory_map.h"
-#include "../include/interupts.h"
+#include "include/gdt.h"
+#include "include/pmm.h"
+#include "include/virtual_memory_map.h"
+#include "include/interupts.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)

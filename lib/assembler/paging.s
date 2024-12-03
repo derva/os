@@ -20,4 +20,3 @@ enablePaging:
     mov %ebp, %esp
     pop %ebp
     ret
-

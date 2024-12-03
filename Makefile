@@ -1,7 +1,7 @@
 BINARY=os.bin
 CODEDIRS=. lib
 INCDIRS=. ./include/ # can be list
-ASDIRS=. lib
+ASDIRS=./lib/assembler
 
 CCPATH=~/opt/cross/bin
 CC=i686-elf-gcc
@@ -34,6 +34,7 @@ $(BINARY): $(OBJECTS) $(ASMBS)
 	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
 
 %.o:%.s
+# $(notdir $@) - to get basename, later on to put everything (.o files) in one directory
 	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:

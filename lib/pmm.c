@@ -1,6 +1,6 @@
 //#include "pmm.h"
-#include "../include/multiboot.h"
-#include "../include/kernel.h"
+#include "include/multiboot.h"
+#include "include/kernel.h"
 #include <stdint.h>
 
 /*

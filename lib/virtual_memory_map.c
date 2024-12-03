@@ -1,4 +1,4 @@
-#include "../include/virtual_memory_map.h"
+#include "include/virtual_memory_map.h"
 
 unsigned int page_directory[1024] __attribute__((aligned(4096)));
 unsigned int page_table[1024] __attribute__((aligned(4096)));
