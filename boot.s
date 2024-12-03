@@ -22,13 +22,16 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
- 
-	mov $stack_top, %esp
+	/* Subtract 8 so that after the 2 32-bit parameters are pushed
+         * on the stack, the stack will still be 16-byte aligned when
+	 * kernel_main is called */
+	mov $stack_top-8, %esp
 	/* push the pointer to the Multiboot infromation structure*/
 	push %ebx
 	/* push magic value */
 	push %eax
 
+	cld /* rquired for the System V 32-bit ABI */
 	call kernel_main
 	cli
 1:	hlt

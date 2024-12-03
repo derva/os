@@ -5,6 +5,8 @@
 
 #include "../include/gdt.h"
 #include "../include/pmm.h"
+#include "../include/virtual_memory_map.h"
+#include "../include/interupts.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -115,7 +117,7 @@ void terminal_writestring(const char* data)
 
 //for now
 void print_hex(uint32_t value) {
-	char hex[8];
+	char hex[9];
 	int i = 8;
 	for (; i >= 0; i--) {
 		int digit = (value >> (i * 4)) & 0xf;
@@ -168,8 +170,9 @@ void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 
 	terminal_writestring("Memory info\n");
 	initPMM(mbt);
-
+	init_paging();
 	terminal_writestring("\n");
+	terminal_writestring("Paging enabled");
     /*
 	for (int i = 0; i < mbt->mmap_length; i += sizeof(struct multiboot_mmap_entry)) {
 		struct multiboot_mmap_entry *mmt  = (struct multiboot_mmap_entry*)(mbt->mmap_addr+i);
@@ -194,4 +197,5 @@ void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 	//terminal_initialize();
 	/* Initialize terminal interface */
 	initGdt(); //init gdt
+	init_interrupt();
 }
