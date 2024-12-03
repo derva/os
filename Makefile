@@ -1,7 +1,7 @@
 BINARY=os.bin
 CODEDIRS=. lib
 INCDIRS=. ./include/ # can be list
-ASDIRS=.
+ASDIRS=. lib
 
 CCPATH=~/opt/cross/bin
 CC=i686-elf-gcc
@@ -31,11 +31,9 @@ $(BINARY): $(OBJECTS) $(ASMBS)
 # only want the .c file dependency here, thus $< instead of $^.
 #
 %.o:%.c
-	@echo $@ $^
 	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
 
 %.o:%.s
-	@echo $@ $^
 	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:

@@ -6,6 +6,7 @@
 #include "../include/gdt.h"
 #include "../include/pmm.h"
 #include "../include/virtual_memory_map.h"
+#include "../include/interupts.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -196,4 +197,5 @@ void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 	//terminal_initialize();
 	/* Initialize terminal interface */
 	initGdt(); //init gdt
+	init_interrupt();
 }

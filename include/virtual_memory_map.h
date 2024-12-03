@@ -7,7 +7,6 @@
 #define PAGE_SIZE 4069
 
 
-
 extern void loadPageDirectory(unsigned int*);
 extern void enablePaging();
 
