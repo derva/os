@@ -163,7 +163,12 @@ void print_int(int32_t value) {
 	tws(buffer);
 }
 
-//void kernel_main(struct multiboot_info* mbt, unsigned int magic) {
+__attribute__((noreturn))
+void exception_handler(void);
+void exception_handler() {
+    __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+}
+
 void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 
 	terminal_initialize();
@@ -197,5 +202,6 @@ void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 	//terminal_initialize();
 	/* Initialize terminal interface */
 	initGdt(); //init gdt
+	//IDT must go after GDT
 	init_interrupt();
 }
