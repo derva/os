@@ -35,7 +35,8 @@ $(BINARY): $(OBJECTS) $(ASMBS)
 
 %.o:%.s
 # $(notdir $@) - to get basename, later on to put everything (.o files) in one directory
-	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
+#	$(CCPATH)/$(CC) $(CFLAGS) -c -o $@ $<
+	$(CCPATH)/$(ASM) -o $@ $<
 
 clean:
 	rm -rf $(BINARY) $(OBJECTS) $(ASMBS) $(DEPFILES)

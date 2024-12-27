@@ -163,12 +163,6 @@ void print_int(int32_t value) {
 	tws(buffer);
 }
 
-__attribute__((noreturn))
-void exception_handler(void);
-void exception_handler() {
-    __asm__ volatile ("cli; hlt"); // Completely hangs the computer
-}
-
 void kernel_main(unsigned int magic, struct multiboot_info* mbt) {
 
 	terminal_initialize();

@@ -10,8 +10,12 @@ struct InterruptDescriptor{
 
 struct InterruptDescriptorRegister {
 	uint16_t limit;
-	uint64_t base;
+	uint32_t base;
 }__attribute__((packed));
 
 typedef struct InterruptDescriptor idt_entry;
 typedef struct InterruptDescriptorRegister idt_reg;
+
+void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);
+__attribute__((noreturn))
+void exception_handler(void);
